@@ -11,4 +11,7 @@ requires-python = ">=3.10"
 dependencies = ["aiohttp>=3.9"]
 
 [project.optional-dependencies]
-dev = ["mypy", "ruff"]
+dev = ["mypy", "ruff", "pytest", "pytest-asyncio", "pytest-aiohttp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
