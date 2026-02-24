@@ -1,0 +1,19 @@
+{
+  "name": "@aip/sdk",
+  "version": "0.1.0",
+  "description": "AIP (Agent Interchange Protocol) TypeScript SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "typescript": "^5.9.3"
+  }
+}

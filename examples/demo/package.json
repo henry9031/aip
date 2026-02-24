@@ -1,0 +1,13 @@
+{
+  "name": "aip-demo",
+  "version": "0.1.0",
+  "description": "AIP Demo — Two agents collaborating",
+  "main": "demo.js",
+  "scripts": {
+    "start": "node demo.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "license": "MIT"
+}

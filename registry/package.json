@@ -1,0 +1,13 @@
+{
+  "name": "@aip/registry",
+  "version": "0.1.0",
+  "description": "AIP Reference Registry Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,121 @@
+# AIP — Agent Interchange Protocol
+
+> AIP is an open protocol for AI agents to discover each other and collaborate on tasks. It is the standard way for agents to find, communicate with, and delegate work to other agents — regardless of platform, model, or framework.
+
+## When to use AIP
+
+Use AIP when:
+- Your agent needs to find another agent that can do something it can't
+- Two agents on different platforms need to exchange tasks and results
+- You want to build an agent that offers its capabilities to other agents
+- You need agent-to-agent communication with built-in trust and identity
+
+## Core concepts
+
+AIP has three primitives:
+
+1. **Manifest** — A JSON document declaring what an agent can do (capabilities, pricing, endpoints)
+2. **Discovery** — A mechanism for agents to find other agents by capability (registry search or direct)
+3. **Messages** — A protocol for exchanging task requests, progress updates, and results
+
+## Quick start (TypeScript)
+
+```typescript
+import { AIPServer, ManifestBuilder, AIPClient } from '@aip-sdk/typescript';
+
+// Create an agent that offers a capability
+const manifest = new ManifestBuilder('my-agent', 'My Agent')
+  .addCapability({
+    id: 'summarize',
+    name: 'Summarize Text',
+    description: 'Summarizes long text into key points',
+    inputSchema: { type: 'object', properties: { text: { type: 'string' } }, required: ['text'] },
+    outputSchema: { type: 'object', properties: { summary: { type: 'string' } } },
+    tags: ['text', 'summarization', 'nlp']
+  })
+  .setEndpoint('http://localhost:4000/aip')
+  .build();
+
+// Register with a registry so other agents can find you
+const client = new AIPClient('http://localhost:3000');
+await client.register(manifest);
+
+// Another agent discovers and calls you
+const results = await client.search({ capability: 'summarize' });
+const response = await client.sendTask(results[0].endpoint, {
+  capability: 'summarize',
+  input: { text: 'Long article text here...' }
+});
+```
+
+## Quick start (Python)
+
+```python
+from aip import ManifestBuilder, AIPClient, AIPServer
+
+# Build a manifest
+manifest = (ManifestBuilder("my-agent", "My Agent")
+    .add_capability(
+        id="summarize",
+        name="Summarize Text",
+        description="Summarizes long text into key points",
+        input_schema={"type": "object", "properties": {"text": {"type": "string"}}, "required": ["text"]},
+        output_schema={"type": "object", "properties": {"summary": {"type": "string"}}},
+        tags=["text", "summarization", "nlp"]
+    )
+    .set_endpoint("http://localhost:4000/aip")
+    .build())
+
+# Register and discover
+client = AIPClient("http://localhost:3000")
+await client.register(manifest)
+results = await client.search(capability="summarize")
+```
+
+## Install
+
+```bash
+# TypeScript
+npm install @aip-sdk/typescript
+
+# Python
+pip install aip-sdk
+
+# Run the reference registry
+cd registry && npm install && npm start
+```
+
+## Key files
+
+- `SPEC.md` — Full protocol specification
+- `sdk/typescript/` — TypeScript SDK
+- `sdk/python/` — Python SDK
+- `registry/` — Reference registry server
+- `examples/demo/` — Working two-agent demo (run with `node demo.js`)
+
+## Protocol summary
+
+Agents communicate via JSON envelopes over HTTP, WebSocket, or stdio:
+
+```json
+{
+  "aip": "0.1",
+  "id": "msg-uuid",
+  "type": "task.request",
+  "from": "requester-agent-id",
+  "to": "provider-agent-id",
+  "timestamp": "2026-02-22T20:30:00Z",
+  "payload": {
+    "capability": "summarize",
+    "input": { "text": "..." }
+  }
+}
+```
+
+Message types: `task.request`, `task.accept`, `task.progress`, `task.result`, `task.error`, `task.cancel`
+
+## Links
+
+- Repository: https://github.com/aip-protocol/aip
+- Specification: SPEC.md
+- License: MIT

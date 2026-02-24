@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aip-sdk"
+version = "0.1.0"
+description = "AIP (Agent Interchange Protocol) Python SDK"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = ["aiohttp>=3.9"]
+
+[project.optional-dependencies]
+dev = ["mypy", "ruff"]
